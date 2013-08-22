@@ -11,10 +11,18 @@ json_file.close()
 
 mt4data = eval(json_string)
 
+prices = [o["OrderOpenPrice"] for o in mt4data["Orders"] if (o["OrderType"] == 0)]
+
+margin = [o["OrderOpenPrice"] * o["OrderLots"] for o in mt4data["Orders"] if (o["OrderType"] == 0)] 
+
 #print(seo_tags)
-print(mt4data["AccountBalance"] * 2)
+print(mt4data["AccountBalance"])
 #print(mt4data["Ask"])
 print(len(mt4data["Orders"]))
+print(min(prices))
+print(sum(margin) * 100000 / 500)
+
+
 
 for order in mt4data["Orders"]:
     if (order["OrderType"] > 1):
@@ -26,6 +34,5 @@ price = mt4data["Ask"] - 0.01
 for n in range(10):
     handleforcreate.write(str(price) + ";1;2;")
     price = price - 0.0001
-    print n
 
 handleprocess.write("end")
