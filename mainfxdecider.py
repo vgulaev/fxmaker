@@ -43,14 +43,21 @@ print(freemargin)
 #print(sum(margin) * 100000 / 500)
 
 price = round(mt4data["Bid"], 4) - 0.0001
+no_max = price 
 neworders = []
 while (freemargin > 0):
+    no_min = price
     neworders.append({"Ticket": "new",
                       "OrderOpenPrice": price,
                       "OrderLots": 0.1})
-    freemargin  = freemargin + 0.1 * profitEURUSD(price, border_price) - price * 100000 / 500 * 0.1 
+    freemargin  = freemargin + 0.1 * profitEURUSD(price, border_price) - price * 100000 / 500 * 0.1
+    price = price - 0.0001 
 
-print(len(neworders))
+current_orders = sorted([o for o in mt4data["Orders"] if ((o["OrderOpenPrice"] >= no_min)and(o["OrderOpenPrice"] <= no_max))], key = lambda o: o["OrderOpenPrice"], reverse=True)
+
+print(neworders[0])
+print(current_orders[0])
+print(len(current_orders))
 
 for order in mt4data["Orders"]:
     if (order["OrderType"] > 1):
