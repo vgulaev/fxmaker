@@ -55,7 +55,7 @@ while (freemargin > 0):
                       "OrderOpenPrice": price,
                       "OrderLots": 0.1})
     freemargin  = freemargin + 0.1 * profitEURUSD(price, border_price) - price * 100000 / 500 * 0.1
-    price = price - 0.0001 
+    price = round(price - 0.0001, 4) 
 
 current_orders = sorted([o for o in mt4data["Orders"] if ((o["OrderOpenPrice"] >= no_min)and(o["OrderOpenPrice"] <= no_max))], key = lambda o: o["OrderOpenPrice"], reverse=True)
 
@@ -64,14 +64,16 @@ print(current_orders[0])
 
 i1 = 0
 i2 = 0
-while (breakthisloop = false):
+breakthisloop = False
+while (breakthisloop == False):
     #if prices equal then check type order and volume
     #if incorect volume then we need new order
-    if (neworders[i1]["OrderOpenPrice"] = current_orders[i2]["OrderOpenPrice"]):
-        if current_orders[i2]["OrderOpenPrice"]
+    if (neworders[i1]["OrderOpenPrice"] == current_orders[i2]["OrderOpenPrice"]):
+        if (current_orders[i2]["OrderLots"] == neworders[i1]["OrderLots"]):
+            neworders[i1]["Ticket"] = "remove"
+    breakthisloop = True 
         
-
-
+print(neworders)
 print(len(current_orders))
 
 for order in mt4data["Orders"]:
