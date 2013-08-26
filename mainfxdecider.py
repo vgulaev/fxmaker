@@ -5,7 +5,11 @@ import json
 def profitEURUSD(sp, ep):
     return (ep - sp) * 100000
     
+#this is minimal price whitch use in calculation 
 border_price = 1.25
+#this the aim of edge volume, every order must have
+#this volume
+volume_edge = 0.1
 
 handlefordel = open("C:/Program Files (x86)/MetaTrader 4/experts/files/delete.csv", "w")
 handleforcreate = open("C:/Program Files (x86)/MetaTrader 4/experts/files/create.csv", "w")
@@ -57,6 +61,17 @@ current_orders = sorted([o for o in mt4data["Orders"] if ((o["OrderOpenPrice"] >
 
 print(neworders[0])
 print(current_orders[0])
+
+i1 = 0
+i2 = 0
+while (breakthisloop = false):
+    #if prices equal then check type order and volume
+    #if incorect volume then we need new order
+    if (neworders[i1]["OrderOpenPrice"] = current_orders[i2]["OrderOpenPrice"]):
+        if current_orders[i2]["OrderOpenPrice"]
+        
+
+
 print(len(current_orders))
 
 for order in mt4data["Orders"]:
