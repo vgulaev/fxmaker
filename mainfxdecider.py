@@ -59,8 +59,8 @@ while (freemargin > 0):
 
 current_orders = sorted([o for o in mt4data["Orders"] if ((o["OrderOpenPrice"] >= no_min)and(o["OrderOpenPrice"] <= no_max))], key = lambda o: o["OrderOpenPrice"], reverse=True)
 
-print(neworders[0])
-print(current_orders[0])
+#print(neworders[0])
+#print(current_orders[0])
 
 i1 = 0
 i2 = 0
@@ -71,7 +71,15 @@ while (breakthisloop == False):
     if (neworders[i1]["OrderOpenPrice"] == current_orders[i2]["OrderOpenPrice"]):
         if (current_orders[i2]["OrderLots"] == neworders[i1]["OrderLots"]):
             neworders[i1]["Ticket"] = "remove"
-    breakthisloop = True 
+        i1 = i1 + 1
+        i2 = i2 + 1
+    elif (neworders[i1]["OrderOpenPrice"] < current_orders[i2]["OrderOpenPrice"]):
+        i1 = i1 + 1
+    elif (neworders[i1]["OrderOpenPrice"] > current_orders[i2]["OrderOpenPrice"]):
+        i2 = i2 + 1
+    if (i1 == len(neworders))or(i2 == len(current_orders)):
+        break
+     
         
 print(neworders)
 print(len(current_orders))
