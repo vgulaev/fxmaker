@@ -74,15 +74,14 @@ while (breakthisloop == False):
         i1 = i1 + 1
         i2 = i2 + 1
     elif (neworders[i1]["OrderOpenPrice"] < current_orders[i2]["OrderOpenPrice"]):
-        i1 = i1 + 1
-    elif (neworders[i1]["OrderOpenPrice"] > current_orders[i2]["OrderOpenPrice"]):
         i2 = i2 + 1
+    elif (neworders[i1]["OrderOpenPrice"] > current_orders[i2]["OrderOpenPrice"]):
+        i1 = i1 + 1
     if (i1 == len(neworders))or(i2 == len(current_orders)):
         break
-     
         
 #print(neworders)
-print(len(current_orders))
+#print(len(current_orders))
 
 for order in current_orders:
     if ((order["OrderLots"] == 0.01)and(order["OrderType"] == 2)):
@@ -92,7 +91,8 @@ handlefordel.close()
 
 #price = mt4data["Ask"] - 0.01
 for n in neworders:
-    handleforcreate.write(str(n["OrderOpenPrice"]) + ";" + str(n["OrderLots"]) + ";2;")
+    if (n["Ticket"] == "new"):
+        handleforcreate.write(str(n["OrderOpenPrice"]) + ";" + str(n["OrderLots"]) + ";2;")
     #price = price - 0.0001
 
 handleprocess.write("end")
