@@ -81,18 +81,18 @@ while (breakthisloop == False):
         break
      
         
-print(neworders)
+#print(neworders)
 print(len(current_orders))
 
-for order in mt4data["Orders"]:
-    if (order["OrderType"] > 1):
+for order in current_orders:
+    if ((order["OrderLots"] == 0.01)and(order["OrderType"] == 2)):
         handlefordel.write(str(order["OrderTicket"]) + ";")
 
 handlefordel.close()
 
-price = mt4data["Ask"] - 0.01
-for n in range(10):
-    handleforcreate.write(str(price) + ";1;2;")
-    price = price - 0.0001
+#price = mt4data["Ask"] - 0.01
+for n in neworders:
+    handleforcreate.write(str(n["OrderOpenPrice"]) + ";" + str(n["OrderLots"]) + ";2;")
+    #price = price - 0.0001
 
 handleprocess.write("end")
