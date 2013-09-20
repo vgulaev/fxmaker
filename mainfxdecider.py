@@ -10,6 +10,7 @@ border_price = 1.25
 #this the aim of edge volume, every order must have
 #this volume
 volume_edge = 0.1
+#volume_edge = 0.03
 
 handlefordel = open("C:/Program Files (x86)/MetaTrader 4/experts/files/delete.csv", "w")
 handleforcreate = open("C:/Program Files (x86)/MetaTrader 4/experts/files/create.csv", "w")
@@ -43,7 +44,7 @@ print(balance_for_grid_001)
 print(sum(margin_for_currents_lots))
 
 freemargin = mt4data["AccountBalance"] + balance_for_grid_001 + sum(margin_for_currents_lots)
-print(freemargin)
+print("Freemargin: ",freemargin)
 #print(sum(margin) * 100000 / 500)
 
 price = round(mt4data["Bid"], 4) - 0.0001
@@ -53,10 +54,12 @@ while (freemargin > 0):
     no_min = price
     neworders.append({"Ticket": "new",
                       "OrderOpenPrice": price,
-                      "OrderLots": 0.1})
-    freemargin  = freemargin + 0.1 * profitEURUSD(price, border_price) - price * 100000 / 500 * 0.1
+                      "OrderLots": volume_edge})
+    freemargin  = freemargin + volume_edge * profitEURUSD(price, border_price) - price * 100000 / 500 * volume_edge
     price = round(price - 0.0001, 4) 
 
+print("max: ", no_max, "min: ", no_min)
+print(len(mt4data["Orders"]))
 current_orders = sorted([o for o in mt4data["Orders"] if ((o["OrderOpenPrice"] >= no_min)and(o["OrderOpenPrice"] <= no_max))], key = lambda o: o["OrderOpenPrice"], reverse=True)
 
 #print(neworders[0])
@@ -64,12 +67,13 @@ current_orders = sorted([o for o in mt4data["Orders"] if ((o["OrderOpenPrice"] >
 
 i1 = 0
 i2 = 0
-breakthisloop = False
+breakthisloop = ((False) or (len(current_orders) == 0))
+print(len(neworders), len(current_orders))
 while (breakthisloop == False):
     #if prices equal then check type order and volume
     #if incorect volume then we need new order
     if (neworders[i1]["OrderOpenPrice"] == current_orders[i2]["OrderOpenPrice"]):
-        if (current_orders[i2]["OrderLots"] == neworders[i1]["OrderLots"]):
+        if (neworders[i1]["OrderLots"] == current_orders[i2]["OrderLots"]):
             neworders[i1]["Ticket"] = "remove"
         i1 = i1 + 1
         i2 = i2 + 1
